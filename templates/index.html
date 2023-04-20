@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.104.2" />
+    <title>Book Recommendation System</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.2/examples/album/"
+    />
+
+    <link
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: solid rgba(0, 0, 0, 0.15);
+        border-width: 1px 0;
+        box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+          inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -0.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      #imgBook {
+        width: 248px;
+        height: 400px;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <strong>Book Recommendation System</strong>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="py-5 text-center container">
+        <div class="px-4 py-5 my-5 text-center">
+          <img
+            class="d-block mx-auto mb-4"
+            src="https://www.pngkit.com/png/full/204-2043980_spell-book-design-lama-fortnite-pixel-art.png"
+            alt=""
+            width="72"
+            height="72"
+          />
+          <h1 class="display-5 fw-bold">Book Recommendation System</h1>
+          <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+              Please enter the name of your favourite book and the system will
+              recommend it.<br />
+              If the book is not in the dataset, please enter your age and we
+              will recommend books from the dataset that people in the same age
+              group would like to read.
+            </p>
+            <form method="POST">
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <input
+                  type="search"
+                  name="title"
+                  class="form-control rounded"
+                  placeholder="Keyword"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <h4 class="text-center">{{msg}}</h4>
+        <div class="px-4 my-5 text-center">
+          <div class="col-lg-6 mx-auto">
+            {% if show_select %}
+            <form method="POST" action="{{ url_for('page') }}">
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <select class="form-select" name="story">
+                  <option value="long">Long Story</option>
+                  <option value="short">Short Story</option>
+                </select>
+                <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">
+                  Submit
+                </button>
+              </div>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for item in data %}
+            <div class="col">
+              <div class="card shadow-sm">
+                <img
+                  class="bd-placeholder-img card-img-top"
+                  id="imgBook"
+                  src="{{ item.bookImage }}"
+                  alt="Image"
+                />
+
+                <div class="card-body">
+                  <h6 class="card-text text-center">{{ item.bookTitle }}</h6>
+                  <p class="card-text text-center">
+                    Pages: {{ item.bookPages }} / Goodreads Website Rating: {{
+                    item.bookRating }}
+                  </p>
+
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div class="btn-group">
+                      <select
+                        class="form-select form-select-sm"
+                        aria-label=".form-select-sm example"
+                      >
+                        <option selected>Select rating...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-secondary"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                    <small class="text-muted"
+                      >Author: {{ item.bookAuthors }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="text-muted py-5">
+      <div class="container">
+        <p class="float-end mb-1">
+          <a href="#">Back to top</a>
+        </p>
+        <p class="mb-1">Book Recommendation System</p>
+        <p class="mb-0">
+          Group: Li Zijian (ID: 22401687) / Zheng Yifei (ID: 22432035) / Wang Bo
+          (ID: 22425330)
+        </p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+  </body>
+</html>
