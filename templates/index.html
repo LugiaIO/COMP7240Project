@@ -85,13 +85,54 @@
   </head>
   <body>
     <header>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-          <a href="#" class="navbar-brand d-flex align-items-center">
-            <strong>Book Recommendation System</strong>
-          </a>
+      <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{url_for('index')}}"
+            >Book Recommendation System</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarText"
+            aria-controls="navbarText"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  aria-disabled="true"
+                  aria-current="page"
+                  href="{{url_for('registerPortal')}}"
+                  >Register</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  aria-disabled="true"
+                  aria-current="page"
+                  href="{{url_for('loginPortal')}}"
+                  >Login</a
+                >
+              </li>
+            </ul>
+            {% if loggedin %}
+            <a
+              class="btn btn-light me-2"
+              style="pointer-events: none; cursor: default"
+              >{{username}}</a
+            >
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+            {% endif %}
+          </div>
         </div>
-      </div>
+      </nav>
     </header>
 
     <main>
@@ -107,24 +148,23 @@
           <h1 class="display-5 fw-bold">Book Recommendation System</h1>
           <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">
-              Please enter the name of your favourite book and the system will
-              recommend it.<br />
-              If the book is not in the dataset, please enter your age and we
-              will recommend books from the dataset that people in the same age
-              group would like to read.
+              Please enter the title of your favourite book and we will
+              recommend some new ones to you. If your favourite title is not in
+              the database, we will also provide you with results based on your
+              preference for the number of pages in the book.
             </p>
-            <form method="POST">
+            <form method="POST" action="{{ url_for('index') }}">
               <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                 <input
                   type="search"
                   name="title"
                   class="form-control rounded"
-                  placeholder="Keyword"
+                  placeholder="Title"
                   aria-label="Search"
                   aria-describedby="search-addon"
                 />
                 <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">
-                  Submit
+                  Search
                 </button>
               </div>
             </form>
@@ -149,60 +189,128 @@
           </div>
         </div>
       </section>
-
+      {% if hidden_score %}
       <div class="album py-5 bg-light">
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for item in data %}
-            <div class="col">
-              <div class="card shadow-sm">
-                <img
-                  class="bd-placeholder-img card-img-top"
-                  id="imgBook"
-                  src="{{ item.bookImage }}"
-                  alt="Image"
-                />
+            <form method="POST" action="{{ url_for('submitRating') }}">
+              <div class="col">
+                <div class="card shadow-sm">
+                  <img
+                    class="bd-placeholder-img card-img-top"
+                    id="imgBook"
+                    src="{{ item.bookImage }}"
+                    alt="Image"
+                  />
 
-                <div class="card-body">
-                  <h6 class="card-text text-center">{{ item.bookTitle }}</h6>
-                  <p class="card-text text-center">
-                    Pages: {{ item.bookPages }} / Goodreads Website Rating: {{
-                    item.bookRating }}
-                  </p>
-
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <div class="btn-group">
-                      <select
-                        class="form-select form-select-sm"
-                        aria-label=".form-select-sm example"
-                      >
-                        <option selected>Select rating...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                      <button
-                        type="submit"
-                        class="btn btn-sm btn-outline-secondary"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                    <small class="text-muted"
-                      >Author: {{ item.bookAuthors }}</small
+                  <div class="card-body">
+                    <h6 class="card-text text-center">{{ item.bookTitle }}</h6>
+                    <div
+                      class="d-flex justify-content-between align-items-center"
                     >
+                      <div class="btn-group">
+                        <input
+                          type="hidden"
+                          name="booktitle"
+                          value="{{ item.bookTitle }}"
+                        />
+                        <select
+                          class="form-select form-select-sm"
+                          aria-label=".form-select-sm example"
+                          name="rating"
+                        >
+                          <option selected>Select rating...</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <button
+                          type="submit"
+                          class="btn btn-sm btn-outline-secondary"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                      <small class="text-muted"
+                        >Author: {{ item.bookAuthors }}</small
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </form>
             {% endfor %}
           </div>
         </div>
       </div>
+      {% else %}
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for item in data %}
+            <form method="POST" action="{{ url_for('submitRating') }}">
+              <div class="col">
+                <div class="card shadow-sm">
+                  <img
+                    class="bd-placeholder-img card-img-top"
+                    id="imgBook"
+                    src="{{ item.bookImage }}"
+                    alt="Image"
+                  />
+
+                  <div class="card-body">
+                    <h6 class="card-text text-center">{{ item.bookTitle }}</h6>
+
+                    <p class="card-text text-center">
+                      Reason for recommendation:<br />
+                      <small>Common genres: {{ item.sameGenre }}</small><br />
+                      <small>Score: {{ item.score }}</small>
+                    </p>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div class="btn-group">
+                        <input
+                          type="hidden"
+                          name="booktitle"
+                          value="{{ item.bookTitle }}"
+                        />
+                        <select
+                          class="form-select form-select-sm"
+                          aria-label=".form-select-sm example"
+                          name="rating"
+                        >
+                          <option selected>Select rating...</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <button
+                          type="submit"
+                          class="btn btn-sm btn-outline-secondary"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                      <small class="text-muted"
+                        >Author: {{ item.bookAuthors }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </main>
 
     <footer class="text-muted py-5">
