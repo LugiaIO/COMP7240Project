@@ -17,11 +17,15 @@ This is a book recommendation system built using Python. It utilizes a hybrid al
 
 1. Clone the repository:
 
+```bash
 git clone https://github.com/Niltopia/COMP7240Project.git
+```
 
-2. Install the required dependencies:
+1. Install the required dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
 3. Set up the database:
 
@@ -33,15 +37,17 @@ pip install -r requirements.txt
 
 - Run the following commands to train the content-based and matrix factorization-based recommendation models:
 
-  ```python
-  python hybrid_algorithm.py
-  ```
+```bash
+python hybrid_algorithm.py
+```
 
-  This will generate the required model files: `tf_idf_model.pkl` and `mf_model.pkl`.
+This will generate the required model files: `tf_idf_model.pkl` and `mf_model.pkl`.
 
 5. Run the application:
 
+```bash
 python app.py
+```
 
 The application will be accessible at `http://localhost:8081` by default.
 
