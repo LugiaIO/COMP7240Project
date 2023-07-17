@@ -1,12 +1,14 @@
 import sqlite3
 
 
+# Function to establish a connection to the SQLite database
 def connection():
     database_file = r"./model/database.db"
     conn = sqlite3.connect(database_file)
     return conn
 
 
+# Function to get the user ID based on the username
 def getUserId(username):
     conn = connection()
     cursor = conn.cursor()
@@ -14,6 +16,7 @@ def getUserId(username):
     return cursor.fetchone()[0]
 
 
+# Function to check if the provided username and password match a user in the database
 def login(username, password):
     conn = connection()
     cursor = conn.cursor()
@@ -24,11 +27,11 @@ def login(username, password):
         conn.commit()
         conn.close()
         return True
-
     else:
         return False
 
 
+# Function to register a new user in the database
 def register(username, password):
     conn = connection()
     cursor = conn.cursor()
@@ -45,6 +48,7 @@ def register(username, password):
         return True
 
 
+# Function to store a user's rating for a book in the database
 def storeRating(username, booktitle, rating):
     conn = connection()
     cursor = conn.cursor()
@@ -56,6 +60,7 @@ def storeRating(username, booktitle, rating):
     conn.close()
 
 
+# Function to get all ratings for a specific user from the database
 def getRating(username):
     conn = connection()
     cursor = conn.cursor()

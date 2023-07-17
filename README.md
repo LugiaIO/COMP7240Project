@@ -1,73 +1,81 @@
 # Book Recommendation System
 
-Our recommendation system provides a personalized experience for users, utilizing a hybrid algorithm, feedback, and preferences to deliver relevant and informative recommendations.
+This is a book recommendation system built using Python. It utilizes a hybrid algorithm that combines content-based filtering and collaborative filtering techniques to provide personalized book recommendations to users. The system is implemented as a web application using Flask framework.
 
-## Live Demo
+## Table of Contents
 
-https://comp7240-4whdf73sva-df.a.run.app
+- [Book Recommendation System](#book-recommendation-system)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Features](#features)
+  - [Data](#data)
+  - [Dependencies](#dependencies)
+  - [Contributing](#contributing)
 
-## Prerequisites
+## Installation
 
-- [Python 3.9.16](https://www.python.org/)
+1. Clone the repository:
 
+git clone https://github.com/Niltopia/COMP7240Project.git
 
-## Installing
+2. Install the required dependencies:
 
-```bash
-pip install requirements.txt
-```
+pip install -r requirements.txt
 
-## Running
+3. Set up the database:
 
-```python
+- The system uses a SQLite database to store user information and ratings. Ensure that you have SQLite installed.
+- Create a new SQLite database file `database.db` and import the provided database schema.
+- Update the database file path in the `connection()` function in `portal.py`.
+
+4. Train the recommendation models:
+
+- Run the following commands to train the content-based and matrix factorization-based recommendation models:
+
+  ```python
+  python hybrid_algorithm.py
+  ```
+
+  This will generate the required model files: `tf_idf_model.pkl` and `mf_model.pkl`.
+
+5. Run the application:
+
 python app.py
-```
-The terminal will output:
-```bash
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead. 
-* Running on all addresses (0.0.0.0)
-* Running on http://127.0.0.1:8081
-* Running on http://198.18.0.1:8081
-```
-Click the link `http://127.0.0.1:8081`, and enjoy the system.
-## Built With
 
-  - [Flask](https://flask.palletsprojects.com/en/2.2.x/) - Web Framework
-  - [SQLite](https://sqlite.org/index.html) - Database
-  - [Bootstrap](https://getbootstrap.com) - Free and open-source CSS framework
-  - [Surprise](https://surprise.readthedocs.io/en/stable/index.html) - Python library “Surprise” for recommendation methods
-  - [nltk](https://www.nltk.org) - Python library “nltk” for preprocess text data for further analysis
+The application will be accessible at `http://localhost:8081` by default.
 
-## Source Tree
-```bash
-.
-├── Dockerfile
-├── app.py
-├── feedback.py
-├── hybrid_algorithm.py
-├── map.json
-├── model
-│   ├── Goodreads_BestBooksEver_1-10000.csv
-│   ├── database.db
-│   ├── mf_model.pkl
-│   └── tf_idf_model.pkl
-├── nltk_dl.py
-├── portal.py
-├── previous codes
-│   └── feedback_orgin.py
-├── readme.md
-├── requirements.txt
-├── search_algorithm_page.py
-├── static
-│   ├── css
-│   │   ├── bootstrap.min.css
-│   │   └── login.css
-│   ├── favicon.ico
-│   └── js
-│       └── bootstrap.bundle.js
-└── templates
-    ├── index.html
-    ├── login.html
-    └── register.html
-```
+## Usage
 
+- Register a new user account or log in with an existing account.
+- Enter a book title or select a book from the list.
+- Get personalized book recommendations based on your preferences and ratings.
+- Rate a book to provide feedback and improve the recommendations.
+
+## Features
+
+- Hybrid algorithm: The recommendation system combines content-based and collaborative filtering techniques for better personalized recommendations.
+- User registration and authentication: Users can create new accounts and log in securely.
+- Book search: Users can search for books by title and select a book from the list.
+- Personalized recommendations: The system suggests books based on user preferences and ratings.
+- Rating feedback: Users can rate books to provide feedback and improve the recommendation accuracy.
+
+## Data
+
+The system uses a dataset of book information obtained from [Goodreads](https://www.goodreads.com). The dataset includes book titles, authors, descriptions, genres, and ratings.
+
+## Dependencies
+
+The system relies on the following Python libraries:
+
+- Flask: A micro web framework for building the web application.
+- SQLite: A lightweight relational database used for storing user information and ratings.
+- Surprise: A Python scikit for building and analyzing recommender systems.
+- pandas: A data manipulation library for handling and processing the book dataset.
+- numpy: A library for mathematical operations and computations.
+- scikit-learn: A machine learning library used for feature extraction and similarity calculations.
+- nltk: A natural language processing library for text preprocessing.
+
+## Contributing
+
+Developer: Vesper - [@Niltopia](https://github.com/Niltopia) - pccw@duck.com

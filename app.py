@@ -23,16 +23,19 @@ class Config(object):
 
 
 app.config.from_object(Config())
+
 # enable CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+# Route to download a file
 @app.route("/dldb")
 def downloadFile():
     path = "./model/database.db"
     return send_file(path, as_attachment=True)
 
 
+# Route to logout
 @app.route("/logout")
 def logout():
     # Remove session data, this will log the user out
@@ -42,6 +45,7 @@ def logout():
     return redirect(url_for("index"))
 
 
+# Route for login
 @app.route("/login", methods=["GET", "POST"])
 def loginPortal():
     if request.method == "GET":
@@ -58,6 +62,7 @@ def loginPortal():
             return render_template("login.html", msg=msg)
 
 
+# Route for registration
 @app.route("/register", methods=["GET", "POST"])
 def registerPortal():
     msg = ""
@@ -73,6 +78,7 @@ def registerPortal():
         return redirect(url_for("loginPortal"))
 
 
+# Route for processing page recommendation
 @app.route("/page", methods=["POST"])
 def page():
     if request.method == "POST":
@@ -82,7 +88,7 @@ def page():
         story = request.form.get("story")
         prefer = userPreferenceJudge(story)
         (data, hidden_score) = recommendByPages(prefer[0], prefer[1], 6)
-        msg = "Based on your prefer, we recommend the following books for you："
+        msg = "Based on your preference, we recommend the following books for you:"
         return render_template(
             "index.html",
             data=data,
@@ -94,11 +100,13 @@ def page():
         )
 
 
+# Route for the home page
 @app.route("/")
 def home():
     return redirect(url_for("index"))
 
 
+# Main index route
 @app.route("/index", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
@@ -122,7 +130,7 @@ def index():
                 msg = (
                     "Based on the title "
                     + book_title
-                    + " you entered, we recommend the following books for you："
+                    + " you entered, we recommend the following books for you:"
                 )
                 show_select = False
                 return render_template(
@@ -143,6 +151,7 @@ def index():
         return render_template("index.html", username=username, loggedin=loggedin)
 
 
+# Route for submitting ratings
 @app.route("/rating", methods=["POST"])
 def submitRating():
     rating = int(request.form["rating"])
@@ -154,7 +163,7 @@ def submitRating():
     msg = (
         "Based on your rating for "
         + booktitle
-        + ", we recommend the following books for you："
+        + ", we recommend the following books for you:"
     )
     return render_template(
         "index.html",
@@ -166,5 +175,6 @@ def submitRating():
     )
 
 
+# Main entry point of the application
 if __name__ == "__main__":
     app.run(port=int(os.environ.get("PORT", 8081)), host="0.0.0.0", debug=True)

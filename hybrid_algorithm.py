@@ -14,6 +14,7 @@ import json
 from portal import getRating, getUserId, storeRating
 
 
+# Function to get the dataset
 def getDataset():
     books = pd.read_csv("./model/Goodreads_BestBooksEver_1-10000.csv")
     books.dropna(inplace=True)
@@ -21,6 +22,7 @@ def getDataset():
     return books
 
 
+# Function to check if two books have the same genres
 def checkSameGenre(book_title_1, orgin_book, score):
     books = getDataset()
     book_1 = books[books["bookTitle"] == book_title_1]
@@ -33,6 +35,7 @@ def checkSameGenre(book_title_1, orgin_book, score):
     return output
 
 
+# Function to extract genres before slashes
 def slashGenres(genres):
     genres = str(genres)
     genre_list = genres.split("|")
@@ -40,6 +43,7 @@ def slashGenres(genres):
     return before_slash_list
 
 
+# Function to convert genres to a string with genres before slashes
 def slashGenresString(genres):
     genres = str(genres)
     genre_list = genres.split("|")
@@ -47,6 +51,7 @@ def slashGenresString(genres):
     return " ".join(before_slash_list)
 
 
+# Function to preprocess the book description
 def preprocessDescription(desc):
     desc = str(desc)
     stop_words = set(stopwords.words("english"))
@@ -57,6 +62,7 @@ def preprocessDescription(desc):
     return " ".join(words)
 
 
+# Function to preprocess the dataset
 def preProcess():
     df = getDataset()
     df["bookGenres"] = df["bookGenres"].apply(slashGenresString)
@@ -64,6 +70,7 @@ def preProcess():
     return df
 
 
+# Function to train the content-based recommendation model
 def trainContentBased():
     books = preProcess()
     books["content"] = books["bookDesc"] + " " + books["bookGenres"]
@@ -73,6 +80,7 @@ def trainContentBased():
         pickle.dump(tf_idf_matrix, f)
 
 
+# Function to train the matrix factorization-based recommendation model
 def trainMFBased():
     books = preProcess()
     reader = Reader(rating_scale=(1, 5))
@@ -85,6 +93,7 @@ def trainMFBased():
         pickle.dump(model, f)
 
 
+# Function to load files
 def loadFiles(file1, file2):
     with open(file1, "rb") as f1:
         obj1 = pickle.load(f1)
@@ -93,6 +102,7 @@ def loadFiles(file1, file2):
     return obj1, obj2
 
 
+# Function to generate book recommendations
 def recommendations(
     user_id, book_title, num_recommendations=6, tf_idf_weight=0.8, mf_weight=0.2
 ):
@@ -165,14 +175,15 @@ def recommendations(
             return merged_list[0:6]
         else:
             return merged_list
-    # print(sim_two_books)
 
 
+# Function to calculate user preference
 def userPreference(user_profile):
     user_profile = user_profile.groupby("bookTitle")["userRating"].mean().reset_index()
     return user_profile
 
 
+# Function to provide feedback on a book
 def feedback(username, booktitle, rating, num_recommendations=6):
     storeRating(username, booktitle, rating)
     ratings = getRating(username)
@@ -244,10 +255,9 @@ def feedback(username, booktitle, rating, num_recommendations=6):
         return merged_list
 
 
-# train()
-# print(preProcess())
-# recommendations("14324", "The Hunger Games")
-
-# trainMFBased()
+# Uncomment the following lines to test or execute specific functions
 # trainContentBased()
+# trainMFBased()
+# print(recommendations("14324", "The Hunger Games"))
+# print(preProcess())
 # print(checkSameGenre("The Pilgrimage", "1984"))
