@@ -86,4 +86,4 @@ The system relies on the following Python libraries:
 
 Developer: Vesper - [@LugiaIO](https://github.com/LugiaIO) - pccw@duck.com
 
-Developer: Henry Zheng - [@FEI120483](https://github.com/FEI120483) - 1204831218@qq.com
+Developer: Henry Zheng - [@FEI120483](https://github.com/FEI120483) - zyf120483@163.com
